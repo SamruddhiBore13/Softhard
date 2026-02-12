@@ -13,7 +13,7 @@
 4. [Responses of API Endpoints before and after Migration](#4-responses-of-api-endpoints-before-and-after-migration)
 
 
-## ** Local Setup**
+##  Local Setup
 ### Local DynamoDB Setup
 Testing this lambda need a local setup of dynamoDB tables required for functioning of this lambda. This section explains how to set up DynamoDB locally using Docker, create required tables, export data from AWS, and import it into the local instance.
 
@@ -131,7 +131,7 @@ The Lambda is invoked via HTTP API endpoints exposed through Amazon API Gateway 
 
 This documentation outlines the available interfaces, supported API endpoints, and their functional behavior following the migration of the User Management Lambda to AWS SAM. The migration focuses on infrastructure standardization, deployment consistency, and local development support using AWS SAM, without introducing any changes to existing business logic, authorization rules, or UI behavior.
 
-## * **User Management Lambda – Roles and Responsibilities**
+##  **User Management Lambda – Roles and Responsibilities**
 
 The User Management Lambda acts as a centralized service for managing users within the platform. Its key responsibilities include:
 
