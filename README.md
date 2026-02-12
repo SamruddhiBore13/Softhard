@@ -1,22 +1,24 @@
 # Centralized User Management Lambda using AWS SAM
 
-## Table Of Contents:  
-[1.Local Setup]
-[2.Introduction]  
-[3.Interfaces]
-   [2.1 GET-users] 
-   [2.2 GET-userDetails]
-   [2.3 GET locations]  
-   [2.4 GET userByOrgId]  
-   [2.5 POST userByOrgId]  
-[4.Responses of API Endpoints before and after Migration]
+# Table Of Contents:  
+## 1. Local Setup
+## 2. Introduction
+## 3. Interfaces
+
+### 2.1 GET-users
+### 2.2 GET-userDetails
+### 2.3 GET locations
+### 2.4 GET userByOrgId
+### 2.5 POST userByOrgId
+
+## 4. Responses of API Endpoints before and after Migration
 
 
 ##**1. Local Setup**
 ###Local DynamoDB Setup
 Testing this lambda need a local setup of dynamoDB tables required for functioning of this lambda. This section explains how to set up DynamoDB locally using Docker, create required tables, export data from AWS, and import it into the local instance.
 
-###✅ Step 1 — Run DynamoDB Local in Docker
+### ✅ Step 1 — Run DynamoDB Local in Docker
 ```bash
 docker run -d \
   -p 8000:8000 \
@@ -29,7 +31,7 @@ After this, DynamoDB Local will be available at:
 http://localhost:8000
 ```
 
-###✅ Step 2 — Create Tables in Local DynamoDB
+### ✅ Step 2 — Create Tables in Local DynamoDB
 Create dev-iotPlatform-users table
 ```bash
 aws dynamodb create-table \
@@ -44,7 +46,7 @@ aws dynamodb create-table \
   --endpoint-url http://localhost:8000
 ```
 
-###✅ Step 3 — Export Data from AWS DynamoDB
+### ✅ Step 3 — Export Data from AWS DynamoDB
 Run these commands (with AWS CLI configured):
 
 Export Users table:
@@ -59,7 +61,7 @@ This will generate:
 users-aws-data.json
 ```
 
-###✅ Step 4 — Import Data into Local DynamoDB
+### ✅ Step 4 — Import Data into Local DynamoDB
 
 4.1 Create Import Script
 ```bash
@@ -114,7 +116,7 @@ aws dynamodb scan \
   --limit 5
 ```
 
-✅ Step 5 — Configure template.yaml for Local Development and change the dynamo endpoint in DynamoService.js
+### ✅ Step 5 — Configure template.yaml for Local Development and change the dynamo endpoint in DynamoService.js
 ```bash
 Environment:
   Variables:
