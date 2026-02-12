@@ -13,7 +13,7 @@
 4. [Responses of API Endpoints before and after Migration](#4-responses-of-api-endpoints-before-and-after-migration)
 
 
-##  Local Setup
+## Local Setup
 ### Local DynamoDB Setup
 Testing this lambda need a local setup of dynamoDB tables required for functioning of this lambda. This section explains how to set up DynamoDB locally using Docker, create required tables, export data from AWS, and import it into the local instance.
 
