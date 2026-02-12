@@ -5,15 +5,15 @@
 1. [Local Setup](#1-local-setup)
 2. [Introduction](#2-introduction)
 3. [Interfaces](#3-interfaces)
-   1. [GET-users](#21-get-users)
-   2. [GET-userDetails](#22-get-userdetails)
-   3. [GET locations](#23-get-locations)
-   4. [GET userByOrgId](#24-get-userbyorgid)
-   5. [POST userByOrgId](#25-post-userbyorgid)
+   1. [GET-users](#31-get-users)
+   2. [GET-userDetails](#32-get-userdetails)
+   3. [GET locations](#33-get-locations)
+   4. [GET userByOrgId](#34-get-userbyorgid)
+   5. [POST userByOrgId](#35-post-userbyorgid)
 4. [Responses of API Endpoints before and after Migration](#4-responses-of-api-endpoints-before-and-after-migration)
 
 
-## Local Setup
+## 1.Local Setup
 ### Local DynamoDB Setup
 Testing this lambda need a local setup of dynamoDB tables required for functioning of this lambda. This section explains how to set up DynamoDB locally using Docker, create required tables, export data from AWS, and import it into the local instance.
 
@@ -123,7 +123,7 @@ Environment:
     DYNAMODB_ENDPOINT: "http://host.docker.internal:8000"
 ```
 
-# **1.Introduction** 
+# **2.Introduction** 
 
 The User Management Lambda is responsible for handling user-related operations within the platform, including user creation, retrieval, updates, and user access management. It supports organization-level user administration and ensures controlled access to platform features through role-based authorization.
 
@@ -147,7 +147,7 @@ Additionally, it enforces role-based access control by leveraging Cognito authen
 
 ---
 
-# **2.Interfaces** 
+# **3.Interfaces** 
 
 The **User Management Lambda** is primarily invoked through **HTTP API endpoints** exposed via API Gateway. These interfaces support user-driven actions initiated from the application UI as well as backend-level user management operations.
 
@@ -174,7 +174,7 @@ These endpoints are both **read-oriented and write-oriented**, enabling controll
 | /api/v1/organizations/{organizationId}/users | GET | Admin | Fetches all users within the specified organization for admin view. | UI – Org Users |
 | /api/v1/organizations/{organizationId}/users | POST | Admin | Creates a new user in the specified organization. | UI – Create User |
 
-## **2.1. GET  /api/v1/users** 
+## **3.1. GET  /api/v1/users** 
 
 **Role:** Customer  
 **Reference:** UI – Users List
@@ -192,7 +192,7 @@ These endpoints are both **read-oriented and write-oriented**, enabling controll
 
   ![users][doc-assets/ui-ref-1.png]
 
-##  **2.2 GET /api/v1/users/userDetails**
+##  **3.2 GET /api/v1/users/userDetails**
 
 **Role:** Customer  
  **Reference:** UI – User Profile
@@ -211,7 +211,7 @@ These endpoints are both **read-oriented and write-oriented**, enabling controll
 
 ![userDetails][doc-assets/ui-ref-2.png]
 
-## **2.3. GET /api/v1/users/locations** 
+## **3.3. GET /api/v1/users/locations** 
 
 **Role:** Customer  
  **Reference:** UI – Locations
@@ -227,7 +227,7 @@ These endpoints are both **read-oriented and write-oriented**, enabling controll
 * Displays a list of locations the user has access to.  
 * If no locations are assigned, a message is shown.
 
-##   **2.4 GET /api/v1/organizations/{organizationId}/users** 
+##  **3.4 GET /api/v1/organizations/{organizationId}/users** 
 
 **Role:** IoT Admin  
  **Reference:** UI – Organization Users
@@ -253,7 +253,7 @@ These endpoints are both **read-oriented and write-oriented**, enabling controll
 
 ![usersid-get-2][doc-assets/ui-ref-4.png]
 
-##  **2.5 POST /api/v1/organizations/{organizationId}/users** 
+##  **3.5 POST /api/v1/organizations/{organizationId}/users** 
 
 **Role:** IoT Admin  
  **Reference:** UI – Organization Users
@@ -284,7 +284,7 @@ These endpoints are both **read-oriented and write-oriented**, enabling controll
 
 # 
 
-# **3.Responses of API Endpoints before and after Migration**  
+# **4.Responses of API Endpoints before and after Migration**  
 
 **1. GET-  /api/v1/users**
 
