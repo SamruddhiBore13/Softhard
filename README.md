@@ -1,15 +1,15 @@
-*Centralized User Management Lambda using AWS SAM*
+# *Centralized User Management Lambda using AWS SAM*
 
 **Table Of Contents:**  
 [1.Local Setup]
-[2.Introduction](#1.introduction)  
-[3.Interfaces](#2.interfaces)  
-   [2.1 GET-users](#2.1.-get--/api/v1/users)  
-   [2.2 GET-userDetails](#2.2-get-/api/v1/users/userdetails)  
-   [2.3 GET locations](#2.3.-get-/api/v1/users/locations)  
-   [2.4 GET userByOrgId](#2.4-get-/api/v1/organizations/{organizationid}/users)  
-   [2.5 POST userByOrgId](#2.5-post-/api/v1/organizations/{organizationid}/users)  
-[4.Responses of API Endpoints before and after Migration](#3.responses-of-api-endpoints-before-and-after-migration.
+[2.Introduction]  
+[3.Interfaces]
+   [2.1 GET-users] 
+   [2.2 GET-userDetails]
+   [2.3 GET locations]  
+   [2.4 GET userByOrgId]  
+   [2.5 POST userByOrgId]  
+[4.Responses of API Endpoints before and after Migration]
 
 
 #**1. Local Setup**
@@ -17,16 +17,21 @@ Local DynamoDB Setup
 Testing this lambda need a local setup of dynamoDB tables required for functioning of this lambda. This section explains how to set up DynamoDB locally using Docker, create required tables, export data from AWS, and import it into the local instance.
 
 ***✅ Step 1 — Run DynamoDB Local in Docker***
+```bash
 docker run -d \
   -p 8000:8000 \
   --name dynamodb-local \
   amazon/dynamodb-local
 After this, DynamoDB Local will be available at:
+```
 
+```bash
 http://localhost:8000
+```
 
 ***✅ Step 2 — Create Tables in Local DynamoDB***
 Create dev-iotPlatform-users table
+```bash
 aws dynamodb create-table \
   --table-name dev-iotPlatform-alarms \
   --attribute-definitions \
@@ -37,30 +42,42 @@ aws dynamodb create-table \
     AttributeName=id,KeyType=RANGE \
   --billing-mode PAY_PER_REQUEST \
   --endpoint-url http://localhost:8000
+```
 
 ***✅ Step 3 — Export Data from AWS DynamoDB***
 Run these commands (with AWS CLI configured):
 
-Export Devices table:
+Export Users table:
+```bash
 aws dynamodb scan \
   --table-name dev-iotPlatform-users \
   --output json > alarms-aws-data.json
+```
 This will generate:
 
+```bash
 users-aws-data.json
+```
+
 ***✅ Step 4 — Import Data into Local DynamoDB***
 
 4.1 Create Import Script
+```bash
 touch import-users.js
-4.2 Install Dependency (Dev Only)
-npm install --save-dev @aws-sdk/client-dynamodb
+```
 
+4.2 Install Dependency (Dev Only)
+```bash
+npm install --save-dev @aws-sdk/client-dynamodb
+```
 Why --save-dev?
 
 Used only for local tooling
 Not required in Lambda runtime
 Keeps production bundle clean
+
 4.3 Sample Import Script
+```bash
 import fs from "fs";
 import { DynamoDBClient, BatchWriteItemCommand } from "@aws-sdk/client-dynamodb";
 
@@ -68,7 +85,6 @@ const client = new DynamoDBClient({
   region: "ap-south-1",
   endpoint: "http://localhost:8000",
 });
-
 const data = JSON.parse(fs.readFileSync("users-aws-data.json", "utf8"));
 const items = data.Items;
 
@@ -76,7 +92,6 @@ const CHUNK_SIZE = 25;
 
 for (let i = 0; i < items.length; i += CHUNK_SIZE) {
   const chunk = items.slice(i, i + CHUNK_SIZE);
-
   const request = {
     RequestItems: {
       "dev-iotPlatform-users": chunk.map((item) => ({
@@ -84,25 +99,30 @@ for (let i = 0; i < items.length; i += CHUNK_SIZE) {
       })),
     },
   };
-
   await client.send(new BatchWriteItemCommand(request));
   console.log(`Imported ${i + chunk.length}/${items.length}`);
 }
+```
 
 Run: node import-users.js
 
 Verify import:
+```bash
 aws dynamodb scan \
   --table-name dev-iotPlatform-users \
   --endpoint-url http://localhost:8000 \
   --limit 5
+```
+
 ✅ Step 5 — Configure template.yaml for Local Development and change the dynamo endpoint in DynamoService.js
+```bash
 Environment:
   Variables:
     IS_LOCAL: "true"
     DYNAMODB_ENDPOINT: "http://host.docker.internal:8000"
+```
 
-# **1.Introduction** {#1.introduction}
+# **1.Introduction** 
 
 The User Management Lambda is responsible for handling user-related operations within the platform, including user creation, retrieval, updates, and user access management. It supports organization-level user administration and ensures controlled access to platform features through role-based authorization.
 
@@ -110,7 +130,7 @@ The Lambda is invoked via HTTP API endpoints exposed through Amazon API Gateway 
 
 This documentation outlines the available interfaces, supported API endpoints, and their functional behavior following the migration of the User Management Lambda to AWS SAM. The migration focuses on infrastructure standardization, deployment consistency, and local development support using AWS SAM, without introducing any changes to existing business logic, authorization rules, or UI behavior.
 
-* **User Management Lambda – Roles and Responsibilities**
+## * **User Management Lambda – Roles and Responsibilities**
 
 The User Management Lambda acts as a centralized service for managing users within the platform. Its key responsibilities include:
 
@@ -126,7 +146,7 @@ Additionally, it enforces role-based access control by leveraging Cognito authen
 
 ---
 
-# **2.Interfaces** {#2.interfaces}
+# **2.Interfaces** 
 
 The **User Management Lambda** is primarily invoked through **HTTP API endpoints** exposed via API Gateway. These interfaces support user-driven actions initiated from the application UI as well as backend-level user management operations.
 
@@ -145,8 +165,6 @@ These endpoints are both **read-oriented and write-oriented**, enabling controll
 
 ## **List of Endpoints**
 
-
-
 | URL | Method | Role | Summary | References |
 | :---: | :---: | ----- | :---: | :---: |
 | /api/v1/users | GET |  Customer | Fetches users associated with the requester’s organization or identity. | UI — Users List |
@@ -155,7 +173,7 @@ These endpoints are both **read-oriented and write-oriented**, enabling controll
 | /api/v1/organizations/{organizationId}/users | GET | Admin | Fetches all users within the specified organization for admin view. | UI – Org Users |
 | /api/v1/organizations/{organizationId}/users | POST | Admin | Creates a new user in the specified organization. | UI – Create User |
 
-## **2.1. GET  /api/v1/users** {#2.1.-get--/api/v1/users}
+## **2.1. GET  /api/v1/users** 
 
 **Role:** Customer  
 **Reference:** UI – Users List
@@ -173,7 +191,7 @@ These endpoints are both **read-oriented and write-oriented**, enabling controll
 
   ![users][doc-assets/ui-ref-1.png]
 
-##  **2.2 GET /api/v1/users/userDetails** {#2.2-get-/api/v1/users/userdetails}
+##  **2.2 GET /api/v1/users/userDetails**
 
 **Role:** Customer  
  **Reference:** UI – User Profile
@@ -192,7 +210,7 @@ These endpoints are both **read-oriented and write-oriented**, enabling controll
 
 ![userDetails][doc-assets/ui-ref-2.png]
 
-## **2.3. GET /api/v1/users/locations** {#2.3.-get-/api/v1/users/locations}
+## **2.3. GET /api/v1/users/locations** 
 
 **Role:** Customer  
  **Reference:** UI – Locations
@@ -208,7 +226,7 @@ These endpoints are both **read-oriented and write-oriented**, enabling controll
 * Displays a list of locations the user has access to.  
 * If no locations are assigned, a message is shown.
 
-##   **2.4 GET /api/v1/organizations/{organizationId}/users** {#2.4-get-/api/v1/organizations/{organizationid}/users}
+##   **2.4 GET /api/v1/organizations/{organizationId}/users** 
 
 **Role:** IoT Admin  
  **Reference:** UI – Organization Users
@@ -234,7 +252,7 @@ These endpoints are both **read-oriented and write-oriented**, enabling controll
 
 ![usersid-get-2][doc-assets/ui-ref-4.png]
 
-##  **2.5 POST /api/v1/organizations/{organizationId}/users** {#2.5-post-/api/v1/organizations/{organizationid}/users}
+##  **2.5 POST /api/v1/organizations/{organizationId}/users** 
 
 **Role:** IoT Admin  
  **Reference:** UI – Organization Users
@@ -265,9 +283,9 @@ These endpoints are both **read-oriented and write-oriented**, enabling controll
 
 # 
 
-# **3.Responses of API Endpoints before and after Migration**  {#3.responses-of-api-endpoints-before-and-after-migration}
+# **3.Responses of API Endpoints before and after Migration**  
 
-**1\. GET-  /api/v1/users**
+**1. GET-  /api/v1/users**
 
 **Before:**  
 
