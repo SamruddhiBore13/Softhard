@@ -190,7 +190,7 @@ These endpoints are both **read-oriented and write-oriented**, enabling controll
 * Displays a table or list of users with basic information such as name and email the count of number of users.  
    
 
-  ![users][doc-assets/ui-ref-1.png]
+  ![users](doc-assets/ui-ref-1.png)
 
 ##  **3.2 GET /api/v1/users/userDetails**
 
@@ -209,7 +209,7 @@ These endpoints are both **read-oriented and write-oriented**, enabling controll
 * Displays user-specific information such as name, email, phone number, locations, and organization details,etc.  
 * Data is loaded automatically without any user action.
 
-![userDetails][doc-assets/ui-ref-2.png]
+![userDetails](doc-assets/ui-ref-2.png)
 
 ## **3.3. GET /api/v1/users/locations** 
 
@@ -249,9 +249,9 @@ These endpoints are both **read-oriented and write-oriented**, enabling controll
 * Displays a list of users associated with the selected organization.  
 * Used for viewing and managing organization-level users.
 
-![usersid-get-1][doc-assets/ui-ref-3.png]
+![usersid-get-1](doc-assets/ui-ref-3.png)
 
-![usersid-get-2][doc-assets/ui-ref-4.png]
+![usersid-get-2](doc-assets/ui-ref-4.png)
 
 ##  **3.5 POST /api/v1/organizations/{organizationId}/users** 
 
@@ -274,9 +274,9 @@ These endpoints are both **read-oriented and write-oriented**, enabling controll
 * Triggered when an IoT Admin fills and submits the **Create User form** within the organization management section.  
 * Validates input fields (name, email, role) and confirms successful creation.
 
-![usersid-post-1][doc-assets/ui-ref-5.png]
+![usersid-post-1](doc-assets/ui-ref-5.png)
 
-![usersid-post-2][doc-assets/ui-ref-6.png]
+![usersid-post-2](doc-assets/ui-ref-6.png)
 
 ---
 
