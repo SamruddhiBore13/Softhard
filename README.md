@@ -1,6 +1,6 @@
-# *Centralized User Management Lambda using AWS SAM*
+# Centralized User Management Lambda using AWS SAM
 
-**Table Of Contents:**  
+## Table Of Contents:  
 [1.Local Setup]
 [2.Introduction]  
 [3.Interfaces]
@@ -12,46 +12,46 @@
 [4.Responses of API Endpoints before and after Migration]
 
 
-#**1. Local Setup**
-Local DynamoDB Setup
+##**1. Local Setup**
+###Local DynamoDB Setup
 Testing this lambda need a local setup of dynamoDB tables required for functioning of this lambda. This section explains how to set up DynamoDB locally using Docker, create required tables, export data from AWS, and import it into the local instance.
 
-***✅ Step 1 — Run DynamoDB Local in Docker***
+###✅ Step 1 — Run DynamoDB Local in Docker
 ```bash
 docker run -d \
   -p 8000:8000 \
   --name dynamodb-local \
   amazon/dynamodb-local
-After this, DynamoDB Local will be available at:
 ```
+After this, DynamoDB Local will be available at:
 
 ```bash
 http://localhost:8000
 ```
 
-***✅ Step 2 — Create Tables in Local DynamoDB***
+###✅ Step 2 — Create Tables in Local DynamoDB
 Create dev-iotPlatform-users table
 ```bash
 aws dynamodb create-table \
-  --table-name dev-iotPlatform-alarms \
+  --table-name dev-iotPlatform-users \
   --attribute-definitions \
-    AttributeName=orgId,AttributeType=S \
     AttributeName=id,AttributeType=S \
+    AttributeName=orgId,AttributeType=S \
   --key-schema \
-    AttributeName=orgId,KeyType=HASH \
-    AttributeName=id,KeyType=RANGE \
+    AttributeName=id,KeyType=HASH \
+    AttributeName=orgId,KeyType=RANGE \
   --billing-mode PAY_PER_REQUEST \
   --endpoint-url http://localhost:8000
 ```
 
-***✅ Step 3 — Export Data from AWS DynamoDB***
+###✅ Step 3 — Export Data from AWS DynamoDB
 Run these commands (with AWS CLI configured):
 
 Export Users table:
 ```bash
 aws dynamodb scan \
   --table-name dev-iotPlatform-users \
-  --output json > alarms-aws-data.json
+  --output json > users-aws-data.json
 ```
 This will generate:
 
@@ -59,7 +59,7 @@ This will generate:
 users-aws-data.json
 ```
 
-***✅ Step 4 — Import Data into Local DynamoDB***
+###✅ Step 4 — Import Data into Local DynamoDB
 
 4.1 Create Import Script
 ```bash
