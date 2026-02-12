@@ -1,8 +1,8 @@
 # Centralized User Management Lambda using AWS SAM
 
 # Table Of Contents:  
-## 1. Local Setup
-## 2. Introduction
+### 1. Local Setup
+### 2. Introduction
 ## 3. Interfaces
 
 ### 2.1 GET-users
@@ -11,11 +11,11 @@
 ### 2.4 GET userByOrgId
 ### 2.5 POST userByOrgId
 
-## 4. Responses of API Endpoints before and after Migration
+### 4. Responses of API Endpoints before and after Migration
 
 
-##**1. Local Setup**
-###Local DynamoDB Setup
+## **1. Local Setup**
+### Local DynamoDB Setup
 Testing this lambda need a local setup of dynamoDB tables required for functioning of this lambda. This section explains how to set up DynamoDB locally using Docker, create required tables, export data from AWS, and import it into the local instance.
 
 ### ✅ Step 1 — Run DynamoDB Local in Docker
