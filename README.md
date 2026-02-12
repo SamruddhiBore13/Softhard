@@ -1,17 +1,16 @@
 # Centralized User Management Lambda using AWS SAM
 
-# Table Of Contents:  
-### 1. Local Setup
-### 2. Introduction
-## 3. Interfaces
+## Table Of Contents
 
-### 2.1 GET-users
-### 2.2 GET-userDetails
-### 2.3 GET locations
-### 2.4 GET userByOrgId
-### 2.5 POST userByOrgId
-
-### 4. Responses of API Endpoints before and after Migration
+1. [Local Setup](#1-local-setup)
+2. [Introduction](#2-introduction)
+3. [Interfaces](#3-interfaces)
+   1. [GET-users](#21-get-users)
+   2. [GET-userDetails](#22-get-userdetails)
+   3. [GET locations](#23-get-locations)
+   4. [GET userByOrgId](#24-get-userbyorgid)
+   5. [POST userByOrgId](#25-post-userbyorgid)
+4. [Responses of API Endpoints before and after Migration](#4-responses-of-api-endpoints-before-and-after-migration)
 
 
 ## **1. Local Setup**
